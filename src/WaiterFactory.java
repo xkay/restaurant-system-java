@@ -73,7 +73,7 @@ class WaiterThread extends Thread {
 	private Lock waiterLock = new ReentrantLock();
 	private Condition tableAssignedCondition = waiterLock.newCondition();
 	private Condition orderCompleteCondition = waiterLock.newCondition();
-	
+
 	private Order order;
 
 	public WaiterThread(Hostess hostess, int waiterNumber, WaiterFactory waiterFactory, int numTablesPerWaiter) {
@@ -84,11 +84,11 @@ class WaiterThread extends Thread {
 		tables = new Vector<Table>(numTablesPerWaiter);
 		this.start();
 	}
-	
+
 	public Condition returnOrderCompleteCondition(){
 		return orderCompleteCondition;
 	}
-	
+
 	public void setOrder(Order o){
 		this.order = o;
 	}
@@ -127,7 +127,7 @@ class WaiterThread extends Thread {
 
 	public Table getTable(int i) {
 		if (tables.size() > i) {
-			return tables.elementAt(i);			
+			return tables.elementAt(i);
 		}
 		return null;
 //		return this.table;
@@ -153,10 +153,9 @@ class WaiterThread extends Thread {
 					// signal the customer who is "eating"
 					getTable(0).getReadyCondition().signal();
 					Restaurant.addWaiterMessage("Waiter " + getWaiterNumber() + " has delivered order " + returnOrder().getOrderText()+" to table "+order.getTable().getTableNumber(), getWaiterNumber());
-					
+
 					getTable(0).getLock().unlock();
 				}
-				//waiterFactory.returnWaiter(this);
 			}
 		} catch (InterruptedException ie) {
 			System.out.println("CustomerThread.run(): InterruptedException: " + ie.getMessage());
